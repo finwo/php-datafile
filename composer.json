@@ -1,5 +1,5 @@
 {
-    "name": "finwo/php-datafile",
+    "name": "finwo/datafile",
     "require": {
         "mustangostang/spyc": "^0.6.1"
     },
