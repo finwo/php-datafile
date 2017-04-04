@@ -86,7 +86,7 @@ class DataFile
 
             if($filename == 'FormatInterface') continue;
 
-            $className = explode("\\",self::class);
+            $className = explode("\\",__CLASS__);
             array_pop($className);
             array_push($className, 'Format');
             array_push($className, $filename);
@@ -105,7 +105,7 @@ class DataFile
 
             if($filename == 'StorageInterface') continue;
 
-            $className = explode("\\",self::class);
+            $className = explode("\\",__CLASS__);
             array_pop($className);
             array_push($className, 'Storage');
             array_push($className, $filename);
