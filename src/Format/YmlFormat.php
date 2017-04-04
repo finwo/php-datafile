@@ -9,7 +9,8 @@ class YmlFormat implements FormatInterface
      */
     public static function encode($input)
     {
-        return \Spyc::YAMLDump($input);
+        //YAMLDump($array, $indent = false, $wordwrap = false, $no_opening_dashes = false)
+        return \Spyc::YAMLDump($input, 2, false, true);
     }
 
     /**

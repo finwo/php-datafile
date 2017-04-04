@@ -1,0 +1,16 @@
+key: value
+array:
+  - with
+  - multiple
+  - enties
+or:
+  - a single entry
+types:
+  boolean:
+    - true
+    - false
+  string:
+    - lala, I'm a string
+    - "As am I"
+  integer: 42
+  float: 123.456

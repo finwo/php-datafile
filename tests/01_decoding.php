@@ -1,6 +1,10 @@
 <?php
 
+// New section
 $test = Test::init('Data decoding');
+
+// Hardcoded verification data
+// We're testing if the decoders work properly
 
 $verifyData = array(
     "hello" => array(
@@ -21,7 +25,7 @@ $verifyTable = array(
 // Data formats
 foreach (\Finwo\DataFile\DataFile::$supported as $format) {
     if($format=='csv') continue;
-    foreach (glob(implode(DS,array(__DIR__,'data','01/data.'.$format))) as $filename) {
+    foreach (glob(implode(DS,array(__DIR__,'data','01/data*.'.$format))) as $filename) {
         $data = \Finwo\DataFile\DataFile::read($filename);
         $test->assert(array_flatten($verifyData), array_flatten($data), 'Decoded data of "' . $filename . '" does not match the predefined values');
     }
@@ -29,7 +33,7 @@ foreach (\Finwo\DataFile\DataFile::$supported as $format) {
 
 // Table formats
 if(in_array('csv', \Finwo\DataFile\DataFile::$supported)) {
-    foreach (glob(implode(DS,array(__DIR__,'data','01/data.csv'))) as $filename) {
+    foreach (glob(implode(DS,array(__DIR__,'data','01/data*.csv'))) as $filename) {
         $data = \Finwo\DataFile\DataFile::read($filename);
         $test->assert(array_flatten($verifyTable), array_flatten($data), 'Decoded data of "' . $filename . '" does not match the predefined values');
     }

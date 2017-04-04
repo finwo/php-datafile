@@ -1,5 +1,7 @@
 <?php
 
+// Check all php files for syntax errors
+
 $test = Test::init('PHP file linting');
 
 foreach(scandir_recursive(APPROOT) as $filename) {
@@ -10,6 +12,8 @@ foreach(scandir_recursive(APPROOT) as $filename) {
     if(!in_array($extension, array('inc','php'))) continue;
     $test->assertContains('No syntax errors', exec(sprintf('php -l "%s" 2>/dev/null', $filename), $out), sprintf("%s contains syntax errors", $filename));
 }
+
+// Check all json files for syntax errors
 
 $test = Test::init('JSON file linting');
 
@@ -26,4 +30,3 @@ foreach(scandir_recursive(APPROOT) as $filename) {
         $test->assert(true, false, sprintf("Parsing error during %s", $filename));
     }
 }
-

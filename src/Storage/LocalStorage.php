@@ -17,11 +17,8 @@ class LocalStorage implements StorageInterface
      */
     public static function read($identifier)
     {
-        if(self::truepath($identifier) == $identifier) {
-            return file_get_contents($identifier);
-        } else {
-            return false;
-        }
+        $path = self::truepath($identifier);
+        return is_file($path) ? file_get_contents($path) : false;
     }
 
     /**

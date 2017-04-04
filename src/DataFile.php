@@ -20,6 +20,21 @@ class DataFile
     );
 
     /**
+     * @param string $identifier
+     *
+     * @return bool|string
+     */
+    protected static function getDriver( $identifier )
+    {
+        foreach (self::$storageDrivers as $storageDriver) {
+            if(forward_static_call(array($storageDriver, 'supports'), $identifier)) {
+                return $storageDriver;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param string $format
      *
      * @return bool
@@ -100,70 +115,52 @@ class DataFile
         }
     }
 
+    /**
+     * @param string $identifier
+     *
+     * @return mixed|null
+     */
     public static function read( $identifier )
     {
         // Fetch which storage driver to use
-        $driver = false;
-        foreach (self::$storageDrivers as $storageDriver) {
-            if(forward_static_call(array($storageDriver, 'supports'), $identifier)) {
-                $driver = $storageDriver;
-                break;
-            }
-        }
+        $driver = self::getDriver($identifier);
         if (!$driver) return null;
 
-        // Fetch the contents of the identifier
-        $contents = forward_static_call(array($storageDriver, 'read'), $identifier);
-        if(!$contents) return null;
-
         // Fetch the data type & formatter
-        $type = forward_static_call(array($storageDriver, 'getType'), $identifier);
+        $type = forward_static_call(array($driver, 'getType'), $identifier);
         if(!in_array($type, self::$supported)) return null;
         $formatter = self::$formatMap[$type];
 
+        // Fetch the contents of the identifier
+        $contents = forward_static_call(array($driver, 'read'), $identifier);
+        if(!$contents) return null;
+
         // Decode the data
         return forward_static_call(array($formatter, 'decode'), $contents);
-
-
-//
-//
-//        $filename = $identifier;
-//
-//
-//        $extension = @strtolower(array_pop(explode('.', $filename)));
-//        switch ($extension) {
-//            case 'csv':
-//                $fp      = fopen($filename, 'r', false);
-//                $data    = array();
-//                $headers = str_getcsv(fgets($fp));
-//                while (($row = fgetcsv($fp)) !== false) {
-//                    array_push($data, array_combine($headers, $row));
-//                }
-//                fclose($fp);
-//
-//                return $data;
-//            default:
-//                return null;
-//        }
     }
 
+    /**
+     * @param string $identifier
+     * @param array  $data
+     *
+     * @return bool|null
+     */
     public static function write($identifier, $data = array())
     {
-//        // Detect extension
-//        $extension = @strtolower(array_pop(explode('.', $filename)));
-//
-//        // Make sure the directory exists
-//        $dir = dirname($filename);
-//        if (!file_exists($dir)) {
-//            mkdir($dir, 0777, true);
-//        }
-//
-//        switch ($extension) {
-//            case 'csv':
-//                return $output;
-//            default:
-//                return null;
-//        }
+        // Fetch which storage driver to use
+        $driver = self::getDriver($identifier);
+        if (!$driver) return null;
+
+        // Fetch the data type & formatter
+        $type = forward_static_call(array($driver, 'getType'), $identifier);
+        if(!in_array($type, self::$supported)) return null;
+        $formatter = self::$formatMap[$type];
+
+        // Encode the data
+        $contents = forward_static_call(array($formatter, 'encode'), $data);
+
+        // Store it where needed
+        return forward_static_call(array($driver, 'write'), $identifier, $contents);
     }
 }
 

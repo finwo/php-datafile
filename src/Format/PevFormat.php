@@ -16,9 +16,45 @@ class PevFormat implements FormatInterface
     /**
      * {@inheritdoc}
      */
-    public static function encode($input)
+    public static function encode($input, $parentKey = '')
     {
-        return implode(PHP_EOL, str_split(http_build_query($input), 70));
+        if ( !in_array(gettype($input), array( 'object', 'array' )) && !strlen($parentKey) ) {
+            $input = array(
+                't' => gettype($input),
+                'v' => $input,
+            );
+        }
+
+        $output = '';
+        switch(gettype($input)) {
+            case 'object':
+                if (method_exists($input, 'toArray')) {
+                    $input = $input->toArray();
+                } elseif (method_exists($input,'__toArray')) {
+                    $input = $input->__toArray();
+                } else {
+                    $input = (array) $input;
+                }
+            case 'array':
+                foreach ($input as $key => $value) {
+                    $compositeKey = strlen($parentKey) ? $parentKey.'['.$key.']' : $key;
+                    if(strlen($output)) $output .= '&';
+                    $output .= self::encode($value, $compositeKey);
+                }
+                break;
+            case 'null':
+                return urlencode($parentKey) . '=null';
+            case 'boolean':
+                return urlencode($parentKey) . '=' . ( $output ? 'true' : 'false' );
+            default:
+                return urlencode($parentKey) . '=' . urlencode( '' . $parentKey);
+        }
+
+        if(!strlen($parentKey)) {
+            $output = implode(PHP_EOL,str_split($output,70));
+        }
+
+        return $output;
     }
 
     /**
@@ -37,16 +73,33 @@ class PevFormat implements FormatInterface
         }
 
         // Decode the input
-        if(substr_count($input,'&')<intval(ini_get('max_input_vars'))) {
-            parse_str($input, $data);
-        } else {
-            $data      = array();
-            $variables = explode('&',$input);
-            foreach ($variables as $variable) {
-                $components = explode('=', $variable);
-                $key        = str_replace(']', '', urldecode(array_shift($components)));
-                $value      = urldecode(array_shift($components));
-                self::set_deep($key, $data, $value);
+        $data      = array();
+        $variables = explode('&',$input);
+        foreach ($variables as $variable) {
+            $components = explode('=', $variable);
+            $key        = str_replace(']', '', urldecode(array_shift($components)));
+            $value      = urldecode(array_shift($components));
+            self::set_deep($key, $data, $value);
+        }
+
+        // Allow for the 'old' format
+        if( implode('|',array_keys($data)) == 't|v' ) {
+            $type = $data['t'];
+            $data = $data['v'];
+            switch($type) {
+                case 'boolean':
+                    $data = filter_var($data, FILTER_VALIDATE_BOOLEAN);
+                    break;
+                case 'integer':
+                    $data = intval($data);
+                    break;
+                case 'double':
+                case 'float':
+                    $data = floatval($data);
+                    break;
+                default:
+                    // Do nothing
+                    break;
             }
         }
 

@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * TODO: Differentiate between data & table formats
+ */
+
 namespace Finwo\DataFile\Format;
 
 interface FormatInterface

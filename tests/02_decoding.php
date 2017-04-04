@@ -1,6 +1,7 @@
 <?php
 
 // Same as 01, but more advanced data
+// Not testing table data; we tested that already
 
 $verifyData = array(
     'site'           => array(
@@ -176,7 +177,7 @@ $verifyData = array(
 foreach (\Finwo\DataFile\DataFile::$supported as $format) {
     if ($format == 'csv') continue;
     if ($format != 'xml') continue;
-    foreach (glob(implode(DS, array( __DIR__, 'data', '02', 'data.' . $format ))) as $filename) {
+    foreach (glob(implode(DS, array( __DIR__, 'data', '02', 'data*.' . $format ))) as $filename) {
         $data = \Finwo\DataFile\DataFile::read($filename);
         $test->assert(array_flatten($verifyData), array_flatten($data), 'Decoded data of "' . $filename . '" does not match the predefined values');
     }
