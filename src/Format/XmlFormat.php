@@ -30,8 +30,8 @@ class XmlFormat implements FormatInterface
             if (is_float($key) && (($key % 1) == 0)) $key = intval($key);
 
             // Fix value
-            if (is_numeric($value))                      $value = floatval($value);
-            if (is_float($value) && (($value % 1) == 0)) $value = intval($value);
+            if (is_numeric($value))                                $value = floatval($value);
+            if (is_float($value) && ( $value === floor($value) ) ) $value = intval($value);
             if ($value==='false') $value = false;
             if ($value==='true')  $value = true;
 

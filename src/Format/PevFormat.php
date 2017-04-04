@@ -45,9 +45,9 @@ class PevFormat implements FormatInterface
             case 'null':
                 return urlencode($parentKey) . '=null';
             case 'boolean':
-                return urlencode($parentKey) . '=' . ( $output ? 'true' : 'false' );
+                return urlencode($parentKey) . '=' . ( $input ? 'true' : 'false' );
             default:
-                return urlencode($parentKey) . '=' . urlencode( '' . $parentKey);
+                return urlencode($parentKey) . '=' . urlencode( '' . $input );
         }
 
         if(!strlen($parentKey)) {
@@ -76,9 +76,17 @@ class PevFormat implements FormatInterface
         $data      = array();
         $variables = explode('&',$input);
         foreach ($variables as $variable) {
+
             $components = explode('=', $variable);
             $key        = str_replace(']', '', urldecode(array_shift($components)));
             $value      = urldecode(array_shift($components));
+
+            // Fix the value format as needed
+            if (is_numeric($value))                                $value = floatval($value);
+            if (is_float($value) && ( $value === floor($value) ) ) $value = intval($value);
+            if ($value==='false') $value = false;
+            if ($value==='true')  $value = true;
+
             self::set_deep($key, $data, $value);
         }
 

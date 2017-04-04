@@ -16,6 +16,12 @@ foreach (\Finwo\DataFile\DataFile::$supported as $format) {
     // Write the data
     $test->assert(true, !!\Finwo\DataFile\DataFile::write($filename, $verifyData), sprintf("Error during writing of %s", $filename));
 
-    // Read the data again
+    // Read the data again ( decoders are tested separately )
     $readData = \Finwo\DataFile\DataFile::read($filename);
+
+    // Test the output
+    $test->assert($verifyData, $readData, sprintf("Data for %s not consistent", $filename));
+
+    // Remove the file again, let's not pollute our harddrive
+    unlink($filename);
 }
