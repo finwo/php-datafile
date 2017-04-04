@@ -6,7 +6,7 @@
       "default"  : "nl",
       "available": ""
     },
-    "logo"            : "\/assets\/images\/logo.png",
+    "logo"            : "/assets/images/logo.png",
     "window_target"   : "_blank",
     "dynamic_title"   : false,
     "dynamic_meta"    : false,
@@ -40,9 +40,9 @@
       ]
     },
     "template-options": {
-      "test-thumb"   : "test\/thumb-simple",
-      "test-filter"  : "test\/filter",
-      "test-overview": "test\/overview_filters"
+      "test-thumb"   : "test/thumb-simple",
+      "test-filter"  : "test/filter",
+      "test-overview": "test/overview_filters"
     }
   },
   "development"   : {
@@ -51,15 +51,15 @@
     "less_ttl"     : 0
   },
   "snapshots"     : {
-    "server"     : "http:\/\/images.example.com",
+    "server"     : "http://images.example.com",
     "thumb"      : "250x150",
     "default"    : "snapshot",
     "resolutions": {
-      "snapshot": "\/snapshot\/:pageid\/snapshot.jpg",
-      "99x84"   : "\/snapshot\/:pageid\/99x84.jpg",
-      "101x85"  : "\/snapshot\/:pageid\/101x85.jpg",
-      "200x150" : "\/snapshot\/:pageid\/200x150.jpg",
-      "125x94"  : "\/snapshot\/:pageid\/125x94.jpg"
+      "snapshot": "/snapshot/:pageid/snapshot.jpg",
+      "99x84"   : "/snapshot/:pageid/99x84.jpg",
+      "101x85"  : "/snapshot/:pageid/101x85.jpg",
+      "200x150" : "/snapshot/:pageid/200x150.jpg",
+      "125x94"  : "/snapshot/:pageid/125x94.jpg"
     }
   },
   "filters"       : {
@@ -119,7 +119,7 @@
   "error"         : {
     "400": {
       "errorCode": 400,
-      "message"  : "Route Parsing error"
+      "message"  : "Route Parsing Error"
     },
     "404": {
       "errorCode": 404,
@@ -134,20 +134,20 @@
     "nl": {
       "account" : "mijn-account",
       "messages": "mijn-berichten",
-      "error"   : "error\/:errorCode"
+      "error"   : "error/:errorCode"
     },
     "en": {
       "account" : "my-account",
       "messages": "my-messages",
-      "error"   : "error\/:errorCode"
+      "error"   : "error/:errorCode"
     }
   },
   "api"           : {
-    "baseUri": "http:\/\/www.example.com\/api\/",
+    "baseUri": "http://www.example.com/api/",
     "ttl"    : 30
   },
   "media"         : {
-    "baseUri": "http:\/\/media.example.com\/"
+    "baseUri": "http://media.example.com/"
   },
   "messages"      : {
     "threads"          : 30,

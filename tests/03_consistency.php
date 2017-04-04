@@ -9,18 +9,36 @@ $test = Test::init('Data consistency');
 $verifyData  = \Finwo\DataFile\DataFile::read(implode(DS,array(__DIR__,'data','03','original.yml')));
 $verifyTable = \Finwo\DataFile\DataFile::read(implode(DS,array(__DIR__,'data','03','original.csv')));
 
+// Data formats
 foreach (\Finwo\DataFile\DataFile::$supported as $format) {
     if ($format == 'csv') continue;
     $filename = implode(DS,array(__DIR__,'data','03','tmp.'.$format));
 
     // Write the data
-    $test->assert(true, !!\Finwo\DataFile\DataFile::write($filename, $verifyData), sprintf("Error during writing of %s", $filename));
+    $test->assert(true, !!\Finwo\DataFile\DataFile::write($filename, $verifyData), sprintf('Error during writing of "%s"', $filename));
 
     // Read the data again ( decoders are tested separately )
     $readData = \Finwo\DataFile\DataFile::read($filename);
 
     // Test the output
-    $test->assert($verifyData, $readData, sprintf("Data for %s not consistent", $filename));
+    $test->assert($verifyData, $readData, sprintf('Data for "%s" not consistent', $filename));
+
+    // Remove the file again, let's not pollute our harddrive
+    unlink($filename);
+}
+
+// Table formats
+if(in_array('csv', \Finwo\DataFile\DataFile::$supported)) {
+    $filename = implode(DS,array(__DIR__,'data','03','tmp.csv'));
+
+    // Write the data
+    $test->assert(true, !!\Finwo\DataFile\DataFile::write($filename, $verifyTable), sprintf('Error during writing of "%s"', $filename));
+
+    // Read the data again ( decoders are tested separately )
+    $readData = \Finwo\DataFile\DataFile::read($filename);
+
+    // Test the output
+    $test->assert($verifyTable, $readData, sprintf('Data for "%s" not consistent', $filename));
 
     // Remove the file again, let's not pollute our harddrive
     unlink($filename);

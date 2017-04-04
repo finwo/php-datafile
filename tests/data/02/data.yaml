@@ -1,10 +1,10 @@
 site:
-  title:  Example Config
+  title: Example Config
   domain: example.com
   languages:
     default: nl
     available:
-  logo:          /assets/images/logo.png
+  logo: /assets/images/logo.png
   window_target: _blank
   dynamic_title: false
   dynamic_meta: false
@@ -19,35 +19,32 @@ site:
     code: UA-0000000-0
   default:
     filters:
-      - - "foo"
-        - "bar"
-      - - "hello"
-        - "world"
+      - - foo
+        - bar
+      - - hello
+        - world
     orderby:
       - date:desc
       - name:desc
       - rating:desc
   template-options:
-    test-thumb:    test/thumb-simple
-    test-filter:   test/filter
+    test-thumb: test/thumb-simple
+    test-filter: test/filter
     test-overview: test/overview_filters
-
 development:
   disable_cache: 0
   compress_less: 0
-  less_ttl:      0
-
+  less_ttl: 0
 snapshots:
   server: http://images.example.com
-  thumb:  250x150
+  thumb: 250x150
   default: snapshot
   resolutions:
     snapshot: /snapshot/:pageid/snapshot.jpg
-    99x84   : /snapshot/:pageid/99x84.jpg
-    101x85  : /snapshot/:pageid/101x85.jpg
-    200x150 : /snapshot/:pageid/200x150.jpg
-    125x94  : /snapshot/:pageid/125x94.jpg
-
+    99x84: /snapshot/:pageid/99x84.jpg
+    101x85: /snapshot/:pageid/101x85.jpg
+    200x150: /snapshot/:pageid/200x150.jpg
+    125x94: /snapshot/:pageid/125x94.jpg
 filters:
   date:
     - >2014-01-01
@@ -61,7 +58,6 @@ filters:
     - fr
     - es
     - it
-
 filter_presets:
   dutch:
     filter:
@@ -72,33 +68,30 @@ filter_presets:
   99_00:
     orderby:
       - age:desc
-
 router:
   home:
-    default:  true
+    default: true
     template: index.html
   account:
-    template:               my-account.html
+    template: my-account.html
     requiresAuthentication: true
   messages:
-    template:               inbox.html
+    template: inbox.html
     requiresAuthentication: true
   error:
     parameters:
       errorCode: 404
     template: error.html
-
 error:
   400:
     errorCode: 400
-    message:   Route Parsing error
+    message: Route Parsing Error
   404:
     errorCode: 404
-    message:   Page Not Found
+    message: Page Not Found
   500:
     errorCode: 500
-    message:   Internal Server Error
-
+    message: Internal Server Error
 urls:
   nl:
     account: mijn-account
@@ -108,24 +101,19 @@ urls:
     account: my-account
     messages: my-messages
     error: error/:errorCode
-
 api:
   baseUri: http://www.example.com/api/
-  ttl:     30
-
+  ttl: 30
 media:
   baseUri: http://media.example.com/
-
 messages:
   threads: 30
   threadsViewed: 5
   paginationButtons: 5
   minLength: 1
   maxLength: 1000
-
 pagination:
   tab_size: 6
-
 styles:
   - extra
   - flexgrid

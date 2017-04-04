@@ -176,7 +176,6 @@ $verifyData = array(
 // Data formats
 foreach (\Finwo\DataFile\DataFile::$supported as $format) {
     if ($format == 'csv') continue;
-    if ($format != 'xml') continue;
     foreach (glob(implode(DS, array( __DIR__, 'data', '02', 'data*.' . $format ))) as $filename) {
         $data = \Finwo\DataFile\DataFile::read($filename);
         $test->assert(array_flatten($verifyData), array_flatten($data), 'Decoded data of "' . $filename . '" does not match the predefined values');
