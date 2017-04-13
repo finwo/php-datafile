@@ -1,8 +1,8 @@
 # finwo / datafile
 
-[![Travis branch](https://img.shields.io/travis/finwo/php-datafile.svg?style=flat-square)]()
-[![Packagist](https://img.shields.io/packagist/v/finwo/datafile.svg?style=flat-square)]()
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/finwo/php-datafile.svg?style=flat-square)]()
+[![Travis branch](https://img.shields.io/travis/finwo/php-datafile.svg)]()
+[![Packagist](https://img.shields.io/packagist/v/finwo/datafile.svg)]()
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/finwo/php-datafile.svg)]()
 
 ## API
 
