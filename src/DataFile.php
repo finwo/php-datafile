@@ -5,6 +5,12 @@ namespace Finwo\DataFile;
 use Finwo\DataFile\Format\FormatInterface;
 use Finwo\DataFile\Storage\StorageInterface;
 
+/*
+ * TODO:
+ *      - Convert `read` and `write` to use `encode` and `decode`
+ *      - Make the code more readable
+ */
+
 class DataFile
 {
     public static $supported = array(
@@ -113,6 +119,32 @@ class DataFile
 
             self::registerStorage($className);
         }
+    }
+
+    /**
+     * @param mixed  $data
+     * @param string $format
+     *
+     * @return string
+     */
+    public static function encode( $data, $format )
+    {
+        if(!in_array($format, self::$supported)) return null;
+        $formatter = self::$formatMap[$format];
+        return forward_static_call(array($formatter, 'encode'), $data);
+    }
+
+    /**
+     * @param string $data
+     * @param string $format
+     *
+     * @return mixed|null
+     */
+    public static function decode( $data, $format )
+    {
+        if(!in_array($format, self::$supported)) return null;
+        $formatter = self::$formatMap[$format];
+        return forward_static_call(array($formatter, 'encode'), $data);
     }
 
     /**
