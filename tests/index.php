@@ -139,14 +139,20 @@ class Test
 // See: http://stackoverflow.com/a/24784144/2928176
 function scandir_recursive( $dir, &$results = array() ) {
     $files = scandir($dir);
+    $results[] = realpath($dir);
+    end($results);
+    $popKey = key($results);
     foreach($files as $key => $value){
+        if ( substr($value,0,1) == "." ) continue;
         $path = realpath($dir.DS.$value);
+        if ( in_array($path,$results) ) continue; // Prevents infinite loops
         if(!is_dir($path)) {
             $results[] = $path;
-        } else if($value != "." && $value != "..") {
+        } else {
             scandir_recursive($path, $results);
         }
     }
+    unset($results[$popKey]);
     return $results;
 }
 
