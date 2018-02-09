@@ -6,9 +6,10 @@ if (!defined('DS'))      define('DS'     , DIRECTORY_SEPARATOR);
 if (!defined('APPROOT')) define('APPROOT', rtrim(dirname(__DIR__), '/'));
 require APPROOT . DS . 'vendor' . DS . 'autoload.php';
 
-$firstTest = true;
-$tests     = 0;
-$fails     = array();
+$firstTest  = true;
+$tests      = 0;
+$assertions = 0;
+$fails      = array();
 
 class Test
 {
@@ -21,6 +22,11 @@ class Test
         true  => ".",
         false => "F",
     );
+
+    public function __construct() {
+        global $tests;
+        $tests++;
+    }
 
     /**
      * @param string $group
@@ -51,14 +57,14 @@ class Test
      */
     public function assert( $a, $b, $errorMessage = null )
     {
-        global $tests, $fails;
+        global $assertions, $fails;
 
         if ( $this->depth === 0 ) {
             echo PHP_EOL, '  ';
             flush();
         }
 
-        $tests++;
+        $assertions++;
         $result = ( $a === $b );
         printf("%s", $this->template[$result]);
         flush();
@@ -80,14 +86,14 @@ class Test
      */
     public function assertNot( $a, $b, $errorMessage = null )
     {
-        global $tests, $fails;
+        global $assertions, $fails;
 
         if ( $this->depth === 0 ) {
             echo PHP_EOL, '  ';
             flush();
         }
 
-        $tests++;
+        $assertions++;
         $result = ( $a !== $b );
         printf("%s", $this->template[$result]);
         flush();
@@ -109,14 +115,14 @@ class Test
      */
     public function assertContains( $a, $b, $errorMessage = null )
     {
-        global $tests, $fails;
+        global $assertions, $fails;
 
         if ( $this->depth === 0 ) {
             echo PHP_EOL, ' ';
             flush();
         }
 
-        $tests++;
+        $assertions++;
         $result = strpos($b, $a) !== false;
         echo $this->template[$result];
         flush();
@@ -177,8 +183,8 @@ echo '------------------------', str_repeat('-', strlen($composerData->name)), P
 
 // Shutdown message
 register_shutdown_function(function() {
-    global $tests, $fails;
-    printf(PHP_EOL . PHP_EOL . 'Ran %d tests of which %d failed' . PHP_EOL . PHP_EOL, $tests, count($fails));
+    global $assertions, $tests, $fails;
+    printf(PHP_EOL . PHP_EOL . 'Ran %d tests with %d assertions of which %d failed' . PHP_EOL . PHP_EOL, $tests, $assertions, count($fails));
 
     foreach ($fails as $index => $fail) {
         printf('Error #%d: %s' . PHP_EOL, $index+1, array_pop($fail));
