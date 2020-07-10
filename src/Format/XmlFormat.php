@@ -9,14 +9,20 @@ class XmlFormat implements FormatInterface
     protected static function xml2array(\SimpleXMLElement $parent)
     {
         $output = array();
+
+        // Combine, assume everything is plural
         foreach ($parent as $name => $element) {
-            $node = &$output[$name];
-            if (is_countable($node) && (1 === count($node))) {
-                $node = array($node);
-            } else {
-                $node = &$node[];
+            if (!array_key_exists($name, $output)) {
+                $output[$name] = array();
             }
-            $node = $element->count() ? self::xml2array($element) : trim($element);
+            array_push($output[$name], $element->count() ? self::xml2array($element) : trim($element));
+        }
+
+        // Deduplicate singletons
+        foreach ($output as $name => $values) {
+            if (count($values) === 1) {
+                $output[$name] = array_pop($values);
+            }
         }
 
         return $output;
