@@ -10,9 +10,12 @@ class XmlFormat implements FormatInterface
     {
         $output = array();
         foreach ($parent as $name => $element) {
-            ($node = &$output[$name])
-            && (1 === count($node) ? $node = array( $node ) : 1)
-            && $node = &$node[];
+            $node = &$output[$name];
+            if (is_countable($node) && (1 === count($node))) {
+                $node = array($node);
+            } else {
+                $node = &$node[];
+            }
             $node = $element->count() ? self::xml2array($element) : trim($element);
         }
 
